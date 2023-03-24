@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.AdministratorDao">
+
+    <resultMap id="AdministratorMap" type="com.nurese.entity.Administrator">
+        <id column="id" property="id"></id>
+        <result column="User_Name" property="username"/>
+        <result column="Password" property="password"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.Administrator" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_administrator(User_Name,Password) values(#{username},#{password})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_administrator
+        <include refid="AdministratorFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_administrator
+        <include refid="AdministratorUpdateCriteria" />
+        <include refid="AdministratorFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_administrator
+        <include refid="AdministratorFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="AdministratorMap">
+        select * from nw_administrator
+        <include refid="AdministratorFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="AdministratorMap">
+        select * from nw_administrator
+        <include refid="AdministratorFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="AdministratorUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updateUsername != null and updateUsername != '' ">User_Name=#{updateUsername},</if>
+            <if test="updatePassword != null and updatePassword != ''">Password=#{updatePassword},</if>
+        </set>
+    </sql>
+    <sql id="AdministratorFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="username != null and username != '' ">and User_Name like concat('%',#{username},'%')</if>
+            <if test="password != null and password != ''">and Password=#{password}</if>
+        </where>
+    </sql>
+</mapper>

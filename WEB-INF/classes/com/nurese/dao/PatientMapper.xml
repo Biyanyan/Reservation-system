@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.PatientDao">
+
+    <resultMap id="PatientMap" type="com.nurese.entity.Patient">
+        <id column="id" property="id"></id>
+        <result column="Patient_Name" property="patientname"/>
+        <result column="Sex" property="sex"/>
+        <result column="Height" property="height"/>
+        <result column="Weight" property="weight"/>
+        <result column="Hospital" property="hospital"/>
+        <result column="Address" property="address"/>
+        <result column="User_id" property="userid"/>
+        <result column="Relationship" property="relationship"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.Patient" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_patient(Patient_Name,Sex,Height,Weight,Hospital,Address,User_id,Relationship)
+        values(#{patientname},#{sex},#{height},#{weight},#{hospital},#{address},#{userid},#{relationship})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_patient
+        <include refid="PatientFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_patient
+        <include refid="PatientUpdateCriteria" />
+        <include refid="PatientFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_patient
+        <include refid="PatientFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="PatientMap">
+        select * from nw_patient
+        <include refid="PatientFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="PatientMap">
+        select * from nw_patient
+        <include refid="PatientFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="PatientUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updatePatientname != null and updatePatientname != '' ">Patient_Name=#{updatePatientname},</if>
+            <if test="updateSex != null and updateSex != ''">Sex=#{updateSex},</if>
+            <if test="updateHeight != null and updateHeight != ''">Height=#{updateHeight},</if>
+            <if test="updateWeight != null and updateWeight != ''">Weight=#{updateWeight},</if>
+            <if test="updateHospital != null and updateHospital != ''">Hospital=#{updateHospital},</if>
+            <if test="updateAddress != null and updateAddress != ''">Address=#{updateAddress},</if>
+            <if test="updateUserid != null and updateUserid != ''">User_id=#{updateUserid},</if>
+            <if test="updateRelationship != null and updateRelationship != ''">Relationship=#{updateRelationship},</if>
+
+        </set>
+    </sql>
+    <sql id="PatientFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="patientname != null and patientname != '' ">and Patient_Name like concat('%',#{patientname},'%')</if>
+            <if test="sex != null and sex != ''">and Sex=#{sex}</if>
+            <if test="height != null and height != ''">and Height=#{height}</if>
+            <if test="weight != null and weight != ''">and Weight=#{weight}</if>
+            <if test="hospital != null and hospital != ''">and Hospital like concat('%',#{hospital},'%')</if>
+            <if test="address != null and address != ''">and Address=#{address}</if>
+            <if test="userid != null ">and User_id=#{userid}</if>
+            <if test="relationship != null and relationship != ''">and Relationship=#{relationship}</if>
+
+
+        </where>
+    </sql>
+</mapper>

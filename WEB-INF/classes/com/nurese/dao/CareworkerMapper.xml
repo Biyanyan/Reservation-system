@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.CareworkerDao">
+
+    <resultMap id="CareworkerMap" type="com.nurese.entity.Careworker">
+        <id column="id" property="id"></id>
+        <result column="Worker_Name" property="workername"/>
+
+        <result column="Worker_Age" property="workerage"/>
+        <result column="Sex" property="sex"/>
+        <result column="Birthday" property="birthday"/>
+        <result column="Height" property="height"/>
+        <result column="Weight" property="weight"/>
+        <result column="Working_Age" property="workingage"/>
+        <result column="Native_Place" property="nativeplace"/>
+        <result column="Telephone_number" property="telephonenumber"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.Careworker" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_careworker(Worker_Name,Worker_Age,Sex,Birthday,Height,Weight,Working_Age,Native_Place,Telephone_number)
+        values(#{workername},#{workerage},#{sex},#{birthday},#{height},#{weight},#{workingage},#{nativeplace},#{telephonenumber})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_careworker
+        <include refid="CareworkerFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_careworker
+        <include refid="CareworkerUpdateCriteria" />
+        <include refid="CareworkerFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_careworker
+        <include refid="CareworkerFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="CareworkerMap">
+        select * from nw_careworker
+        <include refid="CareworkerFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="CareworkerMap">
+        select * from nw_careworker
+        <include refid="CareworkerFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="CareworkerUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updateWorkername != null and updateWorkername != '' ">Worker_Name=#{updateWorkername},</if>
+
+            <if test="updateWorkerage != null and updateWorkerage != ''">Worker_Age=#{updateWorkerage},</if>
+            <if test="updateSex != null and updateSex != ''">Sex=#{updateSex},</if>
+            <if test="updateBirthday != null">Birthday=#{updateBirthday},</if>
+            <if test="updateHeight != null and updateHeight != ''">Height=#{updateHeight},</if>
+            <if test="updateWeight != null and updateWeight != ''">Weight=#{updateWeight},</if>
+            <if test="updateWorkingage != null and updateWorkingage != ''">Working_Age=#{updateWorkingage},</if>
+            <if test="updateNativeplace != null and updateNativeplace != ''">Native_Place=#{updateNativeplace},</if>
+            <if test="updateTelephonenumber != null and updateTelephonenumber != ''">Telephone_number=#{updateTelephonenumber},</if>
+        </set>
+    </sql>
+    <sql id="CareworkerFindCriteria">
+        <where>
+
+            <if test="id != null">and id = #{id}</if>
+            <if test="workername != null and workername != '' ">and Worker_Name like concat('%',#{workername},'%')</if>
+
+            <if test="workerage != null and workerage != ''">and Worker_Age=#{workerage}</if>
+            <if test="sex != null and sex != ''">and Sex=#{sex}</if>
+            <if test="birthday != null ">and Birthday=#{birthday}</if>
+            <if test="height != null and height != ''">and Height=#{height}</if>
+            <if test="weight != null and weight != ''">and Weight=#{weight}</if>
+            <if test="workingage != null and workingage != ''">and Working_Age=#{workingage}</if>
+            <if test="nativeplace != null and nativeplace != ''">and Native_Place=#{nativeplace}</if>
+            <if test="telephonenumber != null and telephonenumber != ''">and Telephone_number=#{telephonenumber}</if>
+
+        </where>
+    </sql>
+</mapper>

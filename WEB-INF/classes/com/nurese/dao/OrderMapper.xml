@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.OrderDao">
+
+    <resultMap id="OrderMap" type="com.nurese.entity.Order">
+        <id column="id" property="id"></id>
+        <result column="User_id" property="userid"/>
+        <result column="Worker_id" property="workerid"/>
+        <result column="Creation_Time" property="createtime"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_order(User_id,Worker_id,Creation_Time)
+        values(#{userid},#{workerid},#{createtime})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_order
+        <include refid="OrderFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_order
+        <include refid="OrderUpdateCriteria" />
+        <include refid="OrderFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_order
+        <include refid="OrderFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="OrderMap">
+        select * from nw_order
+        <include refid="OrderFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="OrderMap">
+        select * from nw_order
+        <include refid="OrderFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="OrderUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updateUserid != null  ">User_id=#{updateUserid},</if>
+            <if test="updateWorkerid != null ">Worker_id=#{updateWorkerid},</if>
+            <if test="updateCreatetime != null ">Creation_Time=#{updateCreatetime}</if>
+        </set>
+    </sql>
+    <sql id="OrderFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="userid != null ">and User_id=#{userid}</if>
+            <if test="workerid != null">and Worker_id=#{workerid}</if>
+            <if test="createtime != null ">and Creation_Time=#{createtime}</if>
+
+        </where>
+    </sql>
+</mapper>

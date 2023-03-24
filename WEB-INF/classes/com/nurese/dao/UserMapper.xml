@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.UserDao">
+
+    <resultMap id="UserMap" type="com.nurese.entity.User">
+        <id column="id" property="id"></id>
+        <result column="User_Name" property="username1"/>
+        <result column="Telephone_number" property="telephonenumber"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_user(User_Name,Telephone_number) values(#{username1},#{telephonenumber})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_user
+        <include refid="UserFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_user
+        <include refid="UserUpdateCriteria" />
+        <include refid="UserFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_user
+        <include refid="UserFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="UserMap">
+        select * from nw_user
+        <include refid="UserFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="UserMap">
+        select * from nw_user
+        <include refid="UserFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="UserUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updateUsername1 != null and updateUsername1 != '' ">User_Name=#{updateUsername1},</if>
+            <if test="updateTelephonenumber != null and updateTelephonenumber != ''">Telephone_number=#{updateTelephonenumber},</if>
+        </set>
+    </sql>
+    <sql id="UserFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="username1 != null and username1 != '' ">and User_Name like concat('%',#{username1},'%')</if>
+            <if test="telephonenumber != null and telephonenumber != ''">and Telephone_number=#{telephonenumber}</if>
+        </where>
+    </sql>
+</mapper>

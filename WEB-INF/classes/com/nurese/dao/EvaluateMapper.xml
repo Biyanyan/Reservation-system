@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nurese.dao.EvaluateDao">
+
+    <resultMap id="EvaluateMap" type="com.nurese.entity.Evaluate">
+        <id column="id" property="id"></id>
+        <result column="Order_ID" property="orderid"/>
+
+        <result column="Evaluate" property="evaluate"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.nurese.entity.Evaluate" useGeneratedKeys="true" keyProperty="id">
+        insert into nw_evaluate(Order_ID,Evaluate)
+        values(#{orderid},#{evaluate})
+    </insert>
+
+
+    <delete id="delete">
+        delete from nw_evaluate
+        <include refid="EvaluateFindCriteria" />
+    </delete>
+
+
+    <update id="update">
+        update nw_evaluate
+        <include refid="EvaluateUpdateCriteria" />
+        <include refid="EvaluateFindCriteria" />
+    </update>
+
+    <select id="count" resultType="int" >
+        select count(*) from nw_evaluate
+        <include refid="EvaluateFindCriteria" />
+    </select>
+
+    <select id="query" resultMap="EvaluateMap">
+        select * from nw_evaluate
+        <include refid="EvaluateFindCriteria" />
+    </select>
+
+    <select id="detail" resultMap="EvaluateMap">
+        select * from nw_evaluate
+        <include refid="EvaluateFindCriteria" />
+        limit 1
+    </select>
+
+    <sql id="EvaluateUpdateCriteria">
+        <set>
+            <if test="updateId != null">id = #{updateId},</if>
+            <if test="updateOrderid != null  ">Order_ID=#{updateOrderid},</if>
+
+            <if test="updateEvaluate != null and updateEvaluate != ''">Evaluate=#{updateEvaluate},</if>
+        </set>
+    </sql>
+    <sql id="EvaluateFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="orderid != null  ">and Order_ID=#{orderid}</if>
+
+            <if test="evaluate != null and evaluate != ''">and Evaluate=#{evaluate}</if>
+        </where>
+    </sql>
+</mapper>
